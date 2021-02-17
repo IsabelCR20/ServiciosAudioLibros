@@ -179,6 +179,6 @@ public class DetalleFragment extends Fragment {//implements View.OnTouchListener
         }
         super.onStop();
     }
-    
+
  */
 }

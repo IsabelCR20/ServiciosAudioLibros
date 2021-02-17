@@ -42,6 +42,7 @@ public class ServicioReproduccion extends Service implements View.OnTouchListene
             // Obtener la informacion de los extras
             Uri audio = Uri.parse(intent.getExtras().getString("uriAudio"));
             this.contexto = DetalleFragment.contexto;
+            DetalleFragment.vista_frag.setOnTouchListener(tocador);
 
 
             Log.d("cosa", "URI recibida:" + audio);
@@ -62,6 +63,15 @@ public class ServicioReproduccion extends Service implements View.OnTouchListene
         }
         return START_STICKY;
     }
+
+    View.OnTouchListener tocador = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            Log.d("cosa", "Quiubo!!! TOUCH");
+            mediaController.show();
+            return false;
+        }
+    };
 
     @Override
     public void onDestroy() {
