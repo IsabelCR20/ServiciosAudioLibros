@@ -21,6 +21,7 @@
 
         <service android:name=".services.MiServicio" />
         <service android:name=".services.MiIntentService" />
+        <service android:name=".services.ServicioReproduccion" />
     </application>
 
 </manifest>

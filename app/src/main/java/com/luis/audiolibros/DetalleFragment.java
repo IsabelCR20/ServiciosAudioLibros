@@ -1,5 +1,6 @@
 package com.luis.audiolibros;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,10 +20,12 @@ import android.widget.TextView;
 
 import com.luis.audiolibros.services.MiIntentService;
 import com.luis.audiolibros.services.MiServicio;
+import com.luis.audiolibros.services.ServicioReproduccion;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl{
+public class DetalleFragment extends Fragment {//implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl{
     public static final String ARG_ID_LIBRO = "id_libro";
     MediaPlayer mediaPlayer;
     MediaController mediaController;
@@ -44,10 +48,11 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         ponInfoLibro(id, getView());
     }
 
+
     private void ponInfoLibro(int id, View vista) {
 
-        intentServicio = new Intent(getContext(), MiServicio.class);
-        getActivity().startService(intentServicio);
+        //intentServicio = new Intent(getContext(), MiServicio.class);
+        //getActivity().startService(intentServicio);
 
         //intentServicio = new Intent(getContext(), MiIntentService.class);
         //getActivity().startService(intentServicio);
@@ -57,28 +62,39 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         ((TextView) vista.findViewById(R.id.autor)).setText(libro.autor);
         ((ImageView) vista.findViewById(R.id.portada)).setImageResource(libro.recursoImagen);
 
-        vista.setOnTouchListener(this);
+        //vista.setOnTouchListener(this);
+        /*
         if (mediaPlayer != null){
             mediaPlayer.release();
         }
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnPreparedListener(this);
         mediaController = new MediaController(getActivity());
-        Uri audio = Uri.parse(libro.urlAudio);
+         */
+        //Uri audio = Uri.parse(libro.urlAudio);
+        Log.d("cosa", "URI enviada:" + libro.urlAudio);
+        //Llamar al servicio señalando la uri
+        Intent servicioRep = new Intent(getActivity(), ServicioReproduccion.class);
+        servicioRep.putExtra("uriAudio", libro.urlAudio);
+        Log.d("cosa", "Listo para inciar servicio");
+        getActivity().startService(servicioRep);
+
+        /*
         try {
             mediaPlayer.setDataSource(getActivity(), audio);
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
             Log.e("Audiolibros", "ERROR: No se puede reproducir "+audio,e);
         }
+         */
     }
-
+/*
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         mediaController.show();
         return false;
     }
-
+/*
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Log.d("Audiolibros", "Entramos en onPrepared de MediaPlayer");
@@ -143,7 +159,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     public int getAudioSessionId() {
         return mediaPlayer.getAudioSessionId();
     }
-
+*/
     @Override
     public void onStop(){
         //getActivity().stopService(intentServicio);
