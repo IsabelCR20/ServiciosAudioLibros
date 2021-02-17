@@ -14,7 +14,9 @@ import android.widget.MediaController;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import com.luis.audiolibros.DetalleFragment;
 import com.luis.audiolibros.R;
 
 import java.io.IOException;
@@ -39,7 +41,9 @@ public class ServicioReproduccion extends Service implements View.OnTouchListene
         if(intent.getExtras().containsKey("uriAudio")){
             // Obtener la informacion de los extras
             Uri audio = Uri.parse(intent.getExtras().getString("uriAudio"));
-            this.contexto = getApplicationContext();
+            this.contexto = DetalleFragment.contexto;
+
+
             Log.d("cosa", "URI recibida:" + audio);
             // Inicializar valores de objetos de reproduccion
             if (mediaPlayer != null){
@@ -77,13 +81,15 @@ public class ServicioReproduccion extends Service implements View.OnTouchListene
         //Obtenermos la vista
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.fragment_detalle, null);
+
         //
         mediaPlayer.start();
         mediaController.setMediaPlayer(this);
-        mediaController.setAnchorView(layout.findViewById(R.id.fragment_detalle));
+        mediaController.setAnchorView(DetalleFragment.vista_frag);
         mediaController.setEnabled(true);
         mediaController.show();
     }
+
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {

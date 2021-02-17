@@ -1,6 +1,7 @@
 package com.luis.audiolibros;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -27,13 +28,18 @@ import java.io.Serializable;
 
 public class DetalleFragment extends Fragment {//implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl{
     public static final String ARG_ID_LIBRO = "id_libro";
+    public static View vista_frag;
+    public static Context contexto;
     MediaPlayer mediaPlayer;
     MediaController mediaController;
     Intent intentServicio;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View vista = inflater.inflate(R.layout.fragment_detalle, container, false);
+        vista_frag = vista.findViewById(R.id.fragment_detalle);
+        contexto = getActivity();
         Bundle args = getArguments();
         if (args != null) {
             int position = args.getInt(ARG_ID_LIBRO);
@@ -160,6 +166,7 @@ public class DetalleFragment extends Fragment {//implements View.OnTouchListener
         return mediaPlayer.getAudioSessionId();
     }
 */
+/*
     @Override
     public void onStop(){
         //getActivity().stopService(intentServicio);
@@ -172,4 +179,6 @@ public class DetalleFragment extends Fragment {//implements View.OnTouchListener
         }
         super.onStop();
     }
+    
+ */
 }
