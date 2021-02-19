@@ -36,6 +36,7 @@ public class ServicioReproduccion extends Service /*implements View.OnTouchListe
     private static Uri audio;
     private static int indice;
     private IBinder binder;
+    private boolean finAudio = false;
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -53,6 +54,7 @@ public class ServicioReproduccion extends Service /*implements View.OnTouchListe
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // Información proveniente del intent
         int pos = 0;
         int idLibro = 0;
         if(intent.getExtras() != null && intent.getExtras().getInt("iniciado") != 0){
@@ -62,13 +64,25 @@ public class ServicioReproduccion extends Service /*implements View.OnTouchListe
             idLibro =intent.getExtras().getInt("idxLibro");
         }
         Log.d("cosa", "StartCommand: "+audio);
+        // Configuración del audio
         mediaPlayer = MediaPlayer.create(this, audio);
-        if(pos != 0)
+        if(pos != 0)        //Creación del audio cuando viene iniciado
             mediaPlayer.seekTo(pos);
         //
         mediaPlayer.start();
         DetalleFragment.mediaPlayer = mediaPlayer;
+        // Evento de finalización de audio
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                Log.d("cosa", "Fin del audio");
+                mediaPlayer.stop();
+                finAudio = true;
+                onDestroy();
+            }
+        });
 
+        //Cositas de la notificación
         Intent notificationIntent = new Intent(this, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         notificationIntent.putExtra("libroIdx", indice);
@@ -81,15 +95,20 @@ public class ServicioReproduccion extends Service /*implements View.OnTouchListe
                 .setContentText("Esta reproduciendo '" + Libro.ejemploLibros().elementAt(idLibro).titulo + "'")
                 .setContentIntent(pendingIntent).build();
         startForeground(218, notificacion);
+
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        if(mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
-        }
         stopForeground(true);
+        if(finAudio)
+            stopSelf();
+        else {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+        }
         super.onDestroy();
     }
 

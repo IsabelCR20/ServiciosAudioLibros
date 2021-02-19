@@ -133,7 +133,6 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
             //mediaPlayer = sr.mediaPlayer;
 
         }
-
         /*
         try {
             mediaPlayer.setDataSource(getActivity(), audio);
@@ -231,7 +230,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         return mediaPlayer.getAudioSessionId();
     }
 
-
+/*
     @Override
     public void onStop(){
         Log.d("cosa","Hola STOP");
@@ -243,7 +242,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
             sr.onDestroy();
         super.onStop();
     }
-
+*/
 
 
     private ServiceConnection connection = new ServiceConnection() {
