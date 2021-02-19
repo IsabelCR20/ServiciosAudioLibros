@@ -92,7 +92,8 @@ public class ServicioReproduccion extends Service /*implements View.OnTouchListe
         notificacion = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.icono)
                 .setContentTitle("AudioLibros")
-                .setContentText("Esta reproduciendo '" + Libro.ejemploLibros().elementAt(idLibro).titulo + "'")
+                .setContentText("Esta reproduciendo '" + Libro.ejemploLibros()
+                        .elementAt(idLibro).titulo + "'")
                 .setContentIntent(pendingIntent).build();
         startForeground(218, notificacion);
 
@@ -102,17 +103,23 @@ public class ServicioReproduccion extends Service /*implements View.OnTouchListe
     @Override
     public void onDestroy() {
         stopForeground(true);
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+        stopSelf();
+        /*
         if(finAudio)
             stopSelf();
         else {
             if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
-        }
+        }*/
         super.onDestroy();
     }
 
-    public static void setParametros(String sound, int idx){
+    public static void setParametros
+            (String sound, int idx){
         audio = Uri.parse(sound);
         indice = idx;
     }

@@ -115,7 +115,6 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         this.idLibro = id;
         sr = new ServicioReproduccion();
         if(!iniciado) {
-
             sr.setParametros(libro.urlAudio, id);
             //Llamar al servicio señalando la uri
             servicioRep = new Intent(getActivity().getBaseContext(), sr.getClass());
@@ -124,7 +123,6 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
             servicioRep.putExtra("iniciado", 0);
             Log.d("cosa", "Listo para inciar servicio cosas: " );
             getActivity().startService(servicioRep);
-
             //mediaPlayer = sr.mediaPlayer;
         } else {
             servicioRep = new Intent(getActivity().getBaseContext(), sr.getClass());
@@ -164,10 +162,8 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         servicioRep.putExtra("uriAudio", libro.urlAudio);
         servicioRep.putExtra("idxLibro", idLibro);
         servicioRep.putExtra("iniciado", currentTime);
-
         Log.d("cosa", "Listo para inciar servicio");
         getActivity().startService(servicioRep);
-
         mediaController.show();
     }
 
@@ -180,8 +176,6 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
             getActivity().stopService(servicioRep);
         else
             sr.onDestroy();
-
-
     }
 
     @Override
@@ -246,7 +240,6 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
 
     private ServiceConnection connection = new ServiceConnection() {
-
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
             ServicioReproduccion.Binder binder = (ServicioReproduccion.Binder) service;
